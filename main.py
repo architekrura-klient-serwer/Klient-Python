@@ -18,13 +18,15 @@ def menu():
           "3. Wyswietl terminarz lekarza\n"
           "4. Dodaj terminarz lekarza\n"
           "5. Usun terminarz lekarza\n"
-          "6. Wyswietl liste pacjentów\n"
-          "7. Wyswietl wizyty pacjentów\n"
-          "8. Wyswietl wizyte danego pacjenta\n"
-          "9. Dodaj wizyte pacjenta\n"
-          "10. Usun wizyte pacjenta\n"
-          "11. Wyswietl menu\n"
-          "12. Wyjscie\n"
+          "6. Modyfikuj terminarz lekarza\n"
+          "7. Wyswietl liste pacjentów\n"
+          "8. Wyswietl wizyty pacjentów\n"
+          "9. Wyswietl wizyte danego pacjenta\n"
+          "10. Dodaj wizyte pacjenta\n"
+          "11. Usun wizyte pacjenta\n"
+          "12. Modyfikuj wizyte pacjenta\n"
+          "13. Wyswietl menu\n"
+          "14. Wyjscie\n"
           "==========================\n")
 
 def endpointy():
@@ -55,7 +57,7 @@ def wszystkie_terminarze():
 def pobierz_terminarz_lekarza():
     pk=input("Który terminarz pokazać? ")
     url_terminarz="http://127.0.0.1:8000/api/doctor/appointment/created/" + pk
-    #token={'Authorization':f'Token {pobierz_token()}'}
+
     terminarz=requests.get(url_terminarz,
                            params={'q': 'requests+language:python'})
     dane= terminarz.json()
@@ -106,6 +108,52 @@ def usun_terminarz():
     r = requests.delete('http://127.0.0.1:8000/api/doctor/appointment/created/'+ pk)
 
     print(r.json())
+
+def modyfikuj_terminarz():
+    pk=input("Podaj identyfikator terminarza który chcesz modyfikowac: ")
+
+    full_name = input("Imię i nazwisko: ")
+    image = input("Zdjecie (domyślnie puste): ")
+    location = input("Miasto, Kraj: ")
+    start = input("Godzina otwarcia gabinetu: ")
+    end = input("Godzina zamknięcia gabinetu: ")
+    quali = input("Nazwa kwalifikacji: ")
+    institute = input("Instytut: ")
+    hospital = input("Nazwa szpitala: ")
+    department = input("Wydział szpitala: ")
+    created_at = input("Data stworzenia terminarza (domyślnie teraz): ")
+    user = input("ID użytkownika: ")
+
+    url_terminarz = "http://127.0.0.1:8000/api/doctor/appointment/created/" + pk
+
+    data = {
+        'full_name': full_name,
+        'image': image,
+        'location': location,
+        'start_time': start,
+        'end_time': end,
+        'qualification_name': quali,
+        'institute_name': institute,
+        'hospital_name': hospital,
+        'department': department,
+        'created_at': created_at,
+        'user': user
+    }
+
+    requests.put(url_terminarz,data={
+        'full_name': full_name,
+        'image': image,
+        'location': location,
+        'start_time': start,
+        'end_time': end,
+        'qualification_name': quali,
+        'institute_name': institute,
+        'hospital_name': hospital,
+        'department': department,
+        'created_at': created_at,
+        'user': user
+    })
+    print("Zmodyfikowano terminarz\n")
 
 def pobierz_liste_pacjentow():
     url_lista="http://127.0.0.1:8000/api/patient"
@@ -174,6 +222,9 @@ def usun_wizyte():
 
     print(r.json())
 
+def modyfikuj_wizyte():
+    pk = input("Podaj identyfikator wizyty, którą chcesz modyfikować: ")
+
 
 menu()
 active=True
@@ -195,26 +246,34 @@ while active:
     elif ans=='5':
         usun_terminarz()
         menu()
-    elif ans=='6':
+    elif ans == '6':
+        modyfikuj_terminarz()
+        menu()
+    elif ans=='7':
         pobierz_liste_pacjentow()
         menu()
-    elif ans == '7':
+    elif ans == '8':
         pobierz_wizyty_pacjentow()
         menu()
-    elif ans=='8':
+    elif ans=='9':
         pobierz_wizyte_pacjenta()
         menu()
-    elif ans=='9':
+    elif ans=='10':
         utworz_wizyte()
         menu()
-    elif ans=='10':
+    elif ans=='11':
         usun_wizyte()
         menu()
-    elif ans=='11':
+    elif ans == '12':
+        modyfikuj_wizyte()
         menu()
-    elif ans=='12':
+    elif ans=='13':
+        menu()
+    elif ans=='14':
         active=False
         break
+
+
 
 
 
